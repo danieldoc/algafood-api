@@ -25,7 +25,7 @@ public class CadastroRestauranteService {
                         String.format("Não existe cadastro de cozinha com código %d", cozinhaId)));
 
         restaurante.setCozinha(cozinha);
-        return restauranteRepository.salvar(restaurante);
+        return restauranteRepository.save(restaurante);
     }
 
     public boolean naoExistePorId(Long id) {
@@ -33,6 +33,6 @@ public class CadastroRestauranteService {
     }
 
     public boolean existePorId(Long id) {
-        return restauranteRepository.existePorId(id);
+        return restauranteRepository.existsById(id);
     }
 }
