@@ -8,10 +8,13 @@ import org.springframework.util.StringUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
@@ -21,28 +24,32 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 
     @Override
     public List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
-        StringBuilder jpql = new StringBuilder("from Restaurante where 0=0");
 
-        Map<String, Object> parametros = new HashMap<>();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
-        if (StringUtils.hasLength(nome)) {
-            jpql.append(" and nome like :nome");
-            parametros.put("nome", "%" + nome + "%");
+        CriteriaQuery<Restaurante> criteriaQuery = criteriaBuilder.createQuery(Restaurante.class);
+        Root<Restaurante> root = criteriaQuery.from(Restaurante.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (StringUtils.hasText(nome)) {
+            Predicate nomePredicate = criteriaBuilder.like(root.get("nome"), "%" + nome + "%");
+            predicates.add(nomePredicate);
         }
 
         if (taxaFreteInicial != null) {
-            jpql.append(" and taxaFrete >= :taxaInicial");
-            parametros.put("taxaInicial", taxaFreteInicial);
+            Predicate taxaFreteInicialPredicate = criteriaBuilder.greaterThanOrEqualTo(root.get("taxaFrete"), taxaFreteInicial);
+            predicates.add(taxaFreteInicialPredicate);
         }
 
         if (taxaFreteFinal != null) {
-            jpql.append(" and taxaFrete <= :taxaFinal");
-            parametros.put("taxaFinal", taxaFreteFinal);
+            Predicate taxaFreteFinalPredicate = criteriaBuilder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal);
+            predicates.add(taxaFreteFinalPredicate);
         }
 
-        TypedQuery<Restaurante> query = entityManager.createQuery(jpql.toString(), Restaurante.class);
-        parametros.forEach(query::setParameter);
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
+        TypedQuery<Restaurante> query = entityManager.createQuery(criteriaQuery);
         return query.getResultList();
     }
 }
