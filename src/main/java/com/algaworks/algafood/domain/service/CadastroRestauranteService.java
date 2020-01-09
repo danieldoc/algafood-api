@@ -5,12 +5,13 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
-import com.algaworks.algafood.infrastucture.repository.spec.RestauranteComFreteGratisSpec;
-import com.algaworks.algafood.infrastucture.repository.spec.RestauranteComNomeSemelhanteSpec;
+import com.algaworks.algafood.infrastucture.repository.spec.RestauranteSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.algaworks.algafood.infrastucture.repository.spec.RestauranteSpecs.*;
 
 @Service
 public class CadastroRestauranteService {
@@ -22,10 +23,7 @@ public class CadastroRestauranteService {
     private CozinhaRepository cozinhaRepository;
 
     public List<Restaurante> buscarTodos(String nome) {
-        RestauranteComFreteGratisSpec restauranteComFreteGratisSpec = new RestauranteComFreteGratisSpec();
-        RestauranteComNomeSemelhanteSpec restauranteComNomeSemelhanteSpec = new RestauranteComNomeSemelhanteSpec(nome);
-
-        return restauranteRepository.findAll(restauranteComFreteGratisSpec.and(restauranteComNomeSemelhanteSpec));
+        return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
     }
 
     public Restaurante salvar(Restaurante restaurante) {
