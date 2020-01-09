@@ -5,13 +5,10 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
-import com.algaworks.algafood.infrastucture.repository.spec.RestauranteSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static com.algaworks.algafood.infrastucture.repository.spec.RestauranteSpecs.*;
 
 @Service
 public class CadastroRestauranteService {
@@ -23,7 +20,7 @@ public class CadastroRestauranteService {
     private CozinhaRepository cozinhaRepository;
 
     public List<Restaurante> buscarTodos(String nome) {
-        return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
+        return restauranteRepository.findRestauranteComFreteGratis(nome);
     }
 
     public Restaurante salvar(Restaurante restaurante) {
