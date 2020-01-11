@@ -32,7 +32,8 @@ public class RestauranteController {
     public List<Restaurante> listar(@RequestParam(required = false) String nome,
                                     @RequestParam(required = false) BigDecimal taxaFreteInicial,
                                     @RequestParam(required = false) BigDecimal taxaFreteFinal) {
-        return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal);
+//        return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal);
+        return restauranteRepository.findAll();
     }
 
     @GetMapping("/{restauranteId}")
