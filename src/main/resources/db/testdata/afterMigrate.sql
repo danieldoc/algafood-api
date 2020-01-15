@@ -12,6 +12,8 @@ delete from restaurante;
 delete from restaurante_forma_pagamento;
 delete from usuario;
 delete from usuario_grupo;
+delete from pedido;
+delete from item_pedido;
 
 set foreign_key_checks = 1;
 
@@ -24,6 +26,8 @@ alter table permissao auto_increment = 1;
 alter table produto auto_increment = 1;
 alter table restaurante auto_increment = 1;
 alter table usuario auto_increment = 1;
+alter table pedido auto_increment = 1;
+alter table item_pedido auto_increment = 1;
 
 insert into cozinha (id, nome) values (1, 'Tailandesa');
 insert into cozinha (id, nome) values (2, 'Indiana');
@@ -70,3 +74,9 @@ insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('T-B
 insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Sanduíche X-Tudo', 'Sandubão com muito queijo, hamburger bovino, bacon, ovo, salada e maionese', 19, 1, 5);
 
 insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, 1, 6);
+
+INSERT INTO usuario (nome, email, senha, data_cadastro) VALUES ('Daniel', 'daniel.olicruz13@gmail.com', '123', current_timestamp());
+
+INSERT INTO pedido (subtotal, taxa_frete, valor_total, data_criacao, status, endereco_cep, endereco_logradouro, endereco_numero, endereco_bairro, endereco_cidade_id, forma_pagamento_id, usuario_cliente_id, restaurante_id) VALUES (37.9, 6, 43.9, current_timestamp(), 'CRIADO', '25804-000', 'Rua XV de Novembro', '402', 'Centro', 4, 1, 1, 5);
+
+INSERT INTO item_pedido (quantidade, preco_unitario, preco_total, produto_id, pedido_id) VALUES (1, 5.9, 5.9, 1, 1);
