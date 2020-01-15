@@ -5,7 +5,6 @@ import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
-import com.algaworks.algafood.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,14 +20,12 @@ public class CadastroCidadeService {
     private CidadeRepository cidadeRepository;
 
     @Autowired
-    private EstadoRepository estadoRepository;
+    private CadastroEstadoService cadastroEstado;
 
     public Cidade salvar(Cidade cidade) {
 
         Long estadoId = cidade.getEstado().getId();
-        Estado estado = estadoRepository.findById(estadoId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format("Não existe cadastro de estado com código %d", estadoId)));
+        Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
 
         cidade.setEstado(estado);
         return cidadeRepository.save(cidade);
