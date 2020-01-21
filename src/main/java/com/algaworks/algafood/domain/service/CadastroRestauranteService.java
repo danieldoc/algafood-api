@@ -13,8 +13,6 @@ import java.util.Optional;
 @Service
 public class CadastroRestauranteService {
 
-    public static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Não existe cadastro de restaurante com código %d";
-
     @Autowired
     private RestauranteRepository restauranteRepository;
 
