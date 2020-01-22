@@ -26,22 +26,28 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
-    private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
-        return Problem.builder()
-                .status(status.value())
-                .type(problemType.getUri())
-                .title(problemType.getTitle())
-                .detail(detail);
+    @ExceptionHandler(EntidadeEmUsoException.class)
+    public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException ex, WebRequest request) {
+
+        HttpStatus status = HttpStatus.CONFLICT;
+        String detail = ex.getMessage();
+        ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
+
+        Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<?> handleEntidadeNaoEncontradaException(NegocioException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
+    public ResponseEntity<?> handleNegocioException(NegocioException ex, WebRequest request) {
 
-    @ExceptionHandler(EntidadeEmUsoException.class)
-    public ResponseEntity<?> handleHttpMediaTypeException(EntidadeEmUsoException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String detail = ex.getMessage();
+        ProblemType problemType = ProblemType.ERRO_NEGOCIO;
+
+        Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
     @Override
@@ -59,5 +65,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                     .build();
 
         return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
+        return Problem.builder()
+                .status(status.value())
+                .type(problemType.getUri())
+                .title(problemType.getTitle())
+                .detail(detail);
     }
 }
