@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.stream.Collectors;
@@ -122,6 +121,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         String detail = ex.getMessage();
         ProblemType problemType = ProblemType.ERRO_NEGOCIO;
+
+        Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleAnyOtherException(Exception ex, WebRequest request) {
+
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        String detail = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o " +
+                "problema persistir, entre em contato com o administrador do sistema.";
+        ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
 
         Problem problem = createProblemBuilder(status, problemType, detail).build();
 
