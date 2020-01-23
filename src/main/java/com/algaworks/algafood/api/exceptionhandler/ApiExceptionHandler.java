@@ -18,10 +18,14 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+    public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o " +
+            "problema persistir, entre em contato com o administrador do sistema.";
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -34,7 +38,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request);
 
         ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
-        String detail = "O corpo da reuisicao esta invalido. Verifique erro de sintaxe.";
+        String detail = "O corpo da requisicao esta invalido. Verifique erro de sintaxe.";
 
         Problem problem = createProblemBuilder(status, problemType, detail).build();
 
@@ -131,11 +135,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleAnyOtherException(Exception ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        String detail = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o " +
-                "problema persistir, entre em contato com o administrador do sistema.";
         ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
 
-        Problem problem = createProblemBuilder(status, problemType, detail).build();
+        Problem problem = createProblemBuilder(status, problemType, MSG_ERRO_GENERICA_USUARIO_FINAL).build();
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
@@ -147,11 +149,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             body = Problem.builder()
                     .title(status.getReasonPhrase())
                     .status(status.value())
+                    .timestamp(LocalDateTime.now())
                     .build();
         else if (body instanceof String)
             body = Problem.builder()
                     .title((String) body)
                     .status(status.value())
+                    .timestamp(LocalDateTime.now())
                     .build();
 
         return super.handleExceptionInternal(ex, body, headers, status, request);
@@ -162,6 +166,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(status.value())
                 .type(problemType.getUri())
                 .title(problemType.getTitle())
-                .detail(detail);
+                .detail(detail)
+                .userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+                .timestamp(LocalDateTime.now());
     }
 }
