@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.model;
 
+import com.algaworks.algafood.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,18 +27,18 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(groups = Groups.CadastroRestaurante.class)
     @Column(nullable = false)
     private String nome;
 
-    @PositiveOrZero
+    @PositiveOrZero(groups = Groups.CadastroRestaurante.class)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
 //    @JsonIgnoreProperties("hibernateLazyInitializer")
 //    @JsonIgnore
     @Valid
-    @NotNull
+    @NotNull(groups = Groups.CadastroRestaurante.class)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
