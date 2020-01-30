@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CadastroCozinhaIntegrationIT {
+public class CadastroCozinhaIT {
 
     @Autowired
     private CadastroCozinhaService cadastroCozinha;
