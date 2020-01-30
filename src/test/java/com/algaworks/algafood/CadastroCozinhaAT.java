@@ -50,4 +50,16 @@ public class CadastroCozinhaAT {
                 .body("", hasSize(4))
                 .body("nome", hasItems("Indiana", "Tailandesa"));
     }
+
+    @Test
+    public void testarRetorna201QuandoCadastrarCozinha() {
+        given()
+                .body("{\"nome\": \"Chinesa\"}")
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+            .when()
+                .post()
+            .then()
+                .statusCode(HttpStatus.CREATED.value());
+    }
 }
