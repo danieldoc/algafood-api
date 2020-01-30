@@ -3,6 +3,7 @@ package com.algaworks.algafood.domain.model;
 import com.algaworks.algafood.core.validation.Groups;
 import com.algaworks.algafood.core.validation.Multiplo;
 import com.algaworks.algafood.core.validation.TaxaFrete;
+import com.algaworks.algafood.core.validation.ValorZeroIncluiDescricao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +14,6 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 import java.math.BigDecimal;
@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField= "nome", descricaoObrigatorio = "Frete Gratis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
