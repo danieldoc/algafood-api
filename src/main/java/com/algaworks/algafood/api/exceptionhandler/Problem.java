@@ -18,11 +18,11 @@ public class Problem {
     private String detail;
     private String userMessage;
     private LocalDateTime timestamp;
-    List<Field> fields;
+    List<Object> objects;
 
     @Getter
     @Builder
-    public static class Field {
+    public static class Object {
         private String name;
         private String userMessage;
     }
