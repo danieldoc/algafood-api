@@ -6,6 +6,7 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import javax.validation.ConstraintViolationException;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -38,5 +40,21 @@ public class CadastroCozinhaAT {
                 .get()
             .then()
                 .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    public void testarContemQuatroCozinhas() {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
+        given()
+                .basePath("/cozinhas")
+                .port(port)
+                .accept(ContentType.JSON)
+            .when()
+                .get()
+            .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("", hasSize(4))
+                .body("nome", hasItems("Indiana", "Tailandesa"));
     }
 }
