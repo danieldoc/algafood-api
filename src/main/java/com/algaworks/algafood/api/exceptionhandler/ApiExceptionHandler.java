@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -40,10 +41,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleValidationException(ex, ex.getBindingResult(), headers, status, request);
+    }
+
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity<?> handleValidacaoException(ValidacaoException ex, WebRequest request) {
+        return handleValidationException(ex, ex.getBindingResult(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    private ResponseEntity<Object> handleValidationException(Exception ex, BindingResult bindingResult, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ProblemType problemType = ProblemType.DADOS_INVALIDOS;
         String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
 
-        List<Problem.Object> problemObjects = ex.getBindingResult().getAllErrors().stream()
+        List<Problem.Object> problemObjects = bindingResult.getAllErrors().stream()
                 .map(objectError -> {
                     String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
 
