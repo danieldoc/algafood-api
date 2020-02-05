@@ -28,10 +28,10 @@ public class RestauranteController {
     private CadastroRestauranteService cadastroRestaurante;
 
     @Autowired
-    RestauranteModelAssembler restauranteModelAssembler;
+    private RestauranteModelAssembler restauranteModelAssembler;
 
     @Autowired
-    RestauranteInputDisassembler restauranteInputDisassembler;
+    private RestauranteInputDisassembler restauranteInputDisassembler;
 
     @GetMapping
     public List<RestauranteModel> listar(@RequestParam(required = false) String nome,
