@@ -2,13 +2,13 @@ package com.algaworks.algafood.domain.exception;
 
 public class RestauranteNaoEncontradoException extends EntidadeNaoEncontradaException {
 
-    public static final String MSG_ESTADO_NAO_ENCONTRADO = "Não existe um cadastro de restaurante com código %d";
+    public static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Não existe um cadastro de restaurante com código %d";
 
     public RestauranteNaoEncontradoException(String message) {
         super(message);
     }
 
-    public RestauranteNaoEncontradoException(Long estadoId) {
-        this(String.format(MSG_ESTADO_NAO_ENCONTRADO, estadoId));
+    public RestauranteNaoEncontradoException(Long restauranteId) {
+        this(String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, restauranteId));
     }
 }
