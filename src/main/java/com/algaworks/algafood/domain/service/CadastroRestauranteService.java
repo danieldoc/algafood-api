@@ -25,6 +25,8 @@ public class CadastroRestauranteService {
     private CadastroCidadeService cadastroCidade;
     @Autowired
     private CadastroFormaPagamentoService cadastroFormaPagamento;
+    @Autowired
+    private CadastroProdutoService cadastroProdutoService;
 
     public List<Restaurante> buscarTodos(String nome) {
         return restauranteRepository.findRestauranteComFreteGratis(nome);
