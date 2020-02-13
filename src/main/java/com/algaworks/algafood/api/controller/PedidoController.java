@@ -1,16 +1,17 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.assembler.PedidoInputDisassembler;
 import com.algaworks.algafood.api.assembler.PedidoModelAssembler;
 import com.algaworks.algafood.api.assembler.PedidoResumoModelAssembler;
 import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
+import com.algaworks.algafood.api.model.input.PedidoInput;
+import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.service.CadastroPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,6 +25,9 @@ public class PedidoController {
     private PedidoModelAssembler pedidoModelAssembler;
 
     @Autowired
+    private PedidoInputDisassembler pedidoInputDisassembler;
+
+    @Autowired
     private PedidoResumoModelAssembler pedidoResumoModelAssembler;
 
     @GetMapping
@@ -34,5 +38,13 @@ public class PedidoController {
     @GetMapping("/{pedidoId}")
     public PedidoModel listar(@PathVariable Long pedidoId) {
         return pedidoModelAssembler.toModel(cadastroPedido.buscarOuFalhar(pedidoId));
+    }
+
+    @PostMapping
+    public PedidoModel incluir(@RequestBody @Valid PedidoInput pedidoInput) {
+        Pedido pedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
+        pedido = cadastroPedido.salvar(pedido);
+
+        return pedidoModelAssembler.toModel(pedido);
     }
 }
