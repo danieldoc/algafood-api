@@ -2,7 +2,7 @@ package com.algaworks.algafood.domain.exception;
 
 public class PermissaoNaoEncontradaException extends EntidadeNaoEncontradaException {
 
-    private static final String MSG_PERMISSAO_NAO_ENCONTRADA = "Permissao com o codigo %s nao encontrada!";
+    private static final String MSG_PERMISSAO_NAO_ENCONTRADA = "Nao existe um cadastro de permissao com o codigo %s";
 
     public PermissaoNaoEncontradaException(String message) {
         super(message);

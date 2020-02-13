@@ -1,6 +1,5 @@
 package com.algaworks.algafood.domain.service;
 
-import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.*;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;

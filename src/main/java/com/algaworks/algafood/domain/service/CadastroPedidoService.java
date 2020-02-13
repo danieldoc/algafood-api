@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.service;
 
+import com.algaworks.algafood.domain.exception.PedidoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
@@ -17,5 +18,10 @@ public class CadastroPedidoService {
 
     public List<Pedido> listar() {
         return pedidoRepository.findAll();
+    }
+
+    public Pedido buscarOuFalhar(Long pedidoId) {
+        return pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new PedidoNaoEncontradoException(pedidoId));
     }
 }

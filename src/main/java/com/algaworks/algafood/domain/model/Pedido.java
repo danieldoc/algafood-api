@@ -41,7 +41,7 @@ public class Pedido {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 12, nullable = false)
-    private StatusPedido status;
+    private StatusPedido status = StatusPedido.CRIADO;
 
     @JsonIgnore
     @Embedded
