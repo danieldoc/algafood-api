@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class CadastroPedidoService {
+public class EmissaoPedidoService {
 
     private static final long CLIENTE_ID = 1L;
 

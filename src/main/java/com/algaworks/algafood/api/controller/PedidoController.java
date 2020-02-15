@@ -10,7 +10,7 @@ import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
-import com.algaworks.algafood.domain.service.CadastroPedidoService;
+import com.algaworks.algafood.domain.service.EmissaoPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class PedidoController {
 
     @Autowired
-    private CadastroPedidoService cadastroPedido;
+    private EmissaoPedidoService cadastroPedido;
 
     @Autowired
     private PedidoModelAssembler pedidoModelAssembler;
