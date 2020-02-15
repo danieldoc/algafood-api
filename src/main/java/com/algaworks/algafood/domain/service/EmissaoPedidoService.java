@@ -14,8 +14,6 @@ import java.util.List;
 @Service
 public class EmissaoPedidoService {
 
-    private static final long CLIENTE_ID = 1L;
-
     @Autowired
     private PedidoRepository pedidoRepository;
 
@@ -38,9 +36,9 @@ public class EmissaoPedidoService {
         return pedidoRepository.findAll();
     }
 
-    public Pedido buscarOuFalhar(Long pedidoId) {
-        return pedidoRepository.findById(pedidoId)
-                .orElseThrow(() -> new PedidoNaoEncontradoException(pedidoId));
+    public Pedido buscarOuFalhar(String codigoPedido) {
+        return pedidoRepository.findByCodigo(codigoPedido)
+                .orElseThrow(() -> new PedidoNaoEncontradoException(codigoPedido));
     }
 
     @Transactional

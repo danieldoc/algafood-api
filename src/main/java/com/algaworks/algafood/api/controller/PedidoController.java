@@ -38,9 +38,9 @@ public class PedidoController {
         return pedidoResumoModelAssembler.toCollectionModel(cadastroPedido.listar());
     }
 
-    @GetMapping("/{pedidoId}")
-    public PedidoModel listar(@PathVariable Long pedidoId) {
-        return pedidoModelAssembler.toModel(cadastroPedido.buscarOuFalhar(pedidoId));
+    @GetMapping("/{codigoPedido}")
+    public PedidoModel listar(@PathVariable String codigoPedido) {
+        return pedidoModelAssembler.toModel(cadastroPedido.buscarOuFalhar(codigoPedido));
     }
 
     @PostMapping

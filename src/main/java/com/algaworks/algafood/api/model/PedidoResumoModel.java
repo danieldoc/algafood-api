@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 @Getter
 public class PedidoResumoModel {
 
-    private Long id;
+    private String codigo;
     private BigDecimal subtotal;
     private BigDecimal taxaFrete;
     private BigDecimal valorTotal;
