@@ -25,6 +25,10 @@ public class CadastroRestauranteService {
     @Autowired
     private CadastroUsuarioService cadastroUsuario;
 
+    public List<Restaurante> buscarTodos() {
+        return restauranteRepository.findAll();
+    }
+
     public List<Restaurante> buscarTodos(String nome) {
         return restauranteRepository.findRestauranteComFreteGratis(nome);
     }
