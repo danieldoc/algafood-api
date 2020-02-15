@@ -2,7 +2,7 @@ package com.algaworks.algafood.domain.exception;
 
 public class ProdutoNaoEncontradoException extends EntidadeNaoEncontradaException {
 
-    public static final String MSG_PRODUTO_NAO_ENCONTRADO = "Produto com o codigo %s nao foi encontrado para o restaurante com o codigo %s!";
+    public static final String MSG_PRODUTO_NAO_ENCONTRADO = "Nao existe um cadastro de produto com codigo %s para o restaurante de codigo %s!";
 
     public ProdutoNaoEncontradoException(String message) {
         super(message);

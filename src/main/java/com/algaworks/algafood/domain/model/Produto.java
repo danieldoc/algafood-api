@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -21,7 +22,7 @@ public class Produto {
     private String descricao;
 
     @Column(nullable = false)
-    private Double preco;
+    private BigDecimal preco;
 
     @Column(nullable = false)
     private boolean ativo;

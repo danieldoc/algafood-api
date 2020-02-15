@@ -6,7 +6,10 @@ import com.algaworks.algafood.api.assembler.PedidoResumoModelAssembler;
 import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.PedidoInput;
+import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Pedido;
+import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.service.CadastroPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +45,18 @@ public class PedidoController {
 
     @PostMapping
     public PedidoModel incluir(@RequestBody @Valid PedidoInput pedidoInput) {
-        Pedido pedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
-        pedido = cadastroPedido.salvar(pedido);
+        try {
+            Pedido pedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
 
-        return pedidoModelAssembler.toModel(pedido);
+            Usuario cliente = new Usuario();
+            cliente.setId(1L);
+            pedido.setCliente(cliente);
+
+            pedido = cadastroPedido.salvar(pedido);
+
+            return pedidoModelAssembler.toModel(pedido);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
     }
 }
