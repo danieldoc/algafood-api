@@ -11,12 +11,13 @@ import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -33,19 +34,20 @@ public class RestauranteController {
     private RestauranteInputDisassembler restauranteInputDisassembler;
 
     @GetMapping
-    public MappingJacksonValue listar(@RequestParam(required = false) String projecao) {
-        List<Restaurante> restaurantes = cadastroRestaurante.buscarTodos();
-        List<RestauranteModel> restaurantesModel = restauranteModelAssembler.toCollectionModel(restaurantes);
+    @JsonView(RestauranteView.Resumo.class)
+    public List<RestauranteModel> listar(@RequestParam(required = false) String nome,
+                                    @RequestParam(required = false) BigDecimal taxaFreteInicial,
+                                    @RequestParam(required = false) BigDecimal taxaFreteFinal) {
+//        return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal);
+        return restauranteModelAssembler.toCollectionModel(cadastroRestaurante.buscarTodos());
+    }
 
-        MappingJacksonValue restaurantesWrapper = new MappingJacksonValue(restaurantesModel);
-        restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
-
-        if ("apenas-nome".equals(projecao))
-            restaurantesWrapper.setSerializationView(RestauranteView.ApenasNome.class);
-        else if ("completo".equals(projecao))
-            restaurantesWrapper.setSerializationView(null);
-
-        return restaurantesWrapper;
+    @JsonView(RestauranteView.ApenasNome.class)
+    @GetMapping(params = "projecao=apenas-nome")
+    public List<RestauranteModel> listarApenasNome(@RequestParam(required = false) String nome,
+                                    @RequestParam(required = false) BigDecimal taxaFreteInicial,
+                                    @RequestParam(required = false) BigDecimal taxaFreteFinal) {
+        return listar(nome, taxaFreteInicial, taxaFreteFinal);
     }
 
     @GetMapping("/{restauranteId}")
