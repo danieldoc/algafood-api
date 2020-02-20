@@ -12,11 +12,16 @@ import java.util.ArrayList;
 
 public class PedidoSpecs {
 
+    private PedidoSpecs() {
+    }
+
     public static Specification<Pedido> construirFiltro(PedidoFilter filtro) {
-        return (Root<Pedido> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) -> {
+        return (Root<Pedido> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
             var predicates = new ArrayList<Predicate>();
-            root.fetch("restaurante").fetch("cozinha");
-            root.fetch("cliente");
+            if (Pedido.class.equals(query.getResultType())) {
+                root.fetch("restaurante").fetch("cozinha");
+                root.fetch("cliente");
+            }
 
             if (filtro.getClienteId() != null)
                 predicates.add(builder.equal(root.get("cliente"), filtro.getClienteId()));
