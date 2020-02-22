@@ -13,6 +13,6 @@ import java.util.Date;
 public class VendaDiaria {
 
     private Date data;
-    private Long quantidadeVendas;
+    private Long totalVendas;
     private BigDecimal totalFaturado;
 }

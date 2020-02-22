@@ -1,4 +1,4 @@
-package com.algaworks.algafood.infrastucture.repository.service;
+package com.algaworks.algafood.infrastucture.service.query;
 
 import com.algaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.algaworks.algafood.domain.model.Pedido;
