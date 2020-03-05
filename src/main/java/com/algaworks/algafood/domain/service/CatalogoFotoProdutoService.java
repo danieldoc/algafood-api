@@ -14,6 +14,12 @@ public class CatalogoFotoProdutoService {
 
     @Transactional
     public FotoProduto salvar(FotoProduto foto) {
+        Long restauranteId = foto.getProduto().getRestaurante().getId();
+        Long produtoId = foto.getProduto().getId();
+
+        produtoRepository.findFotoById(restauranteId, produtoId)
+                .ifPresent(produtoRepository::delete);
+
         return produtoRepository.save(foto);
     }
 }

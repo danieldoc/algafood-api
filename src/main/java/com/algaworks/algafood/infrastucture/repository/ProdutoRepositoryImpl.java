@@ -20,4 +20,10 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryQueries {
         entityManager.persist(fotoProduto);
         return fotoProduto;
     }
+
+    @Transactional
+    @Override
+    public void delete(FotoProduto fotoProduto) {
+        entityManager.remove(fotoProduto);
+    }
 }
