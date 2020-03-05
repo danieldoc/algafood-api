@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProdutoRepository extends CustomJpaRepository<Produto, Long> {
+public interface ProdutoRepository extends CustomJpaRepository<Produto, Long>, ProdutoRepositoryQueries {
 
     Optional<Produto> findByRestauranteIdAndId(Long restauranteId, Long produtoId);
 
