@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
+import java.util.Optional;
 
 @Service
 public class CatalogoFotoProdutoService {
@@ -24,8 +25,13 @@ public class CatalogoFotoProdutoService {
         Long produtoId = foto.getProduto().getId();
         String nomeNovoArquivo = fotoStorage.gerarNomeArquivo(foto.getNomeArquivo());
 
-        produtoRepository.findFotoById(restauranteId, produtoId)
-                .ifPresent(produtoRepository::delete);
+        Optional<FotoProduto> fotoProdutoOptional = produtoRepository.findFotoById(restauranteId, produtoId);
+
+        String nomeArquivoExistente = null;
+        if (fotoProdutoOptional.isPresent()) {
+            nomeArquivoExistente = fotoProdutoOptional.get().getNomeArquivo();
+            produtoRepository.delete(fotoProdutoOptional.get());
+        }
 
         foto.setNomeArquivo(nomeNovoArquivo);
         FotoProduto fotoProduto = produtoRepository.save(foto);
@@ -36,7 +42,7 @@ public class CatalogoFotoProdutoService {
                 .inputStream(dadosArquivo)
                 .build();
 
-        fotoStorage.armazenar(novaFoto);
+        fotoStorage.substituir(novaFoto, nomeArquivoExistente);
 
         return fotoProduto;
     }

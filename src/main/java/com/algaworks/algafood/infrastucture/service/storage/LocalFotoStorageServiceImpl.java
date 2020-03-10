@@ -19,11 +19,22 @@ public class LocalFotoStorageServiceImpl implements FotoStorageService {
     @Override
     public void armazenar(NovaFoto novaFoto) {
         try {
-            Path arquivoPath = Path.of(getNomeArquivoPath(novaFoto.getNomeArquivo()).toUri());
+            Path arquivoPath = getNomeArquivoPath(novaFoto.getNomeArquivo());
 
             FileCopyUtils.copy(novaFoto.getInputStream(), Files.newOutputStream(arquivoPath));
         } catch (IOException e) {
             throw new StorageException("Nao foi possivel armazenar arquivo.", e);
+        }
+    }
+
+    @Override
+    public void remover(String nomeArquivo) {
+        try {
+            Path arquivoPath = getNomeArquivoPath(nomeArquivo);
+
+            Files.deleteIfExists(arquivoPath);
+        } catch (IOException e) {
+            throw new StorageException("Nao foi possivel excluir arquivo.", e);
         }
     }
 
