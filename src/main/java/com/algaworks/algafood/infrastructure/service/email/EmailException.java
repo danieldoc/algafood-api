@@ -1,4 +1,4 @@
-package com.algaworks.algafood.infrastucture.service.mail;
+package com.algaworks.algafood.infrastructure.service.email;
 
 public class EmailException extends RuntimeException {
 

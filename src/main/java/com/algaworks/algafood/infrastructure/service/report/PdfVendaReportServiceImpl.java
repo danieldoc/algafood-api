@@ -1,4 +1,4 @@
-package com.algaworks.algafood.infrastucture.service.report;
+package com.algaworks.algafood.infrastructure.service.report;
 
 import com.algaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.algaworks.algafood.domain.service.VendaQueryService;

@@ -1,4 +1,4 @@
-package com.algaworks.algafood.infrastucture.service.storage;
+package com.algaworks.algafood.infrastructure.service.storage;
 
 public class StorageException extends RuntimeException {
 

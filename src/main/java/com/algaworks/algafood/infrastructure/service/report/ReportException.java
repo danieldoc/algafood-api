@@ -1,4 +1,4 @@
-package com.algaworks.algafood.infrastucture.service.report;
+package com.algaworks.algafood.infrastructure.service.report;
 
 public class ReportException extends RuntimeException {
 

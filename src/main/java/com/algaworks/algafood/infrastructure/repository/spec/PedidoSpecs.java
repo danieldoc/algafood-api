@@ -1,4 +1,4 @@
-package com.algaworks.algafood.infrastucture.repository.spec;
+package com.algaworks.algafood.infrastructure.repository.spec;
 
 import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.model.Pedido;

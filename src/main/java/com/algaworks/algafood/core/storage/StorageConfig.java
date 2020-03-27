@@ -1,8 +1,8 @@
 package com.algaworks.algafood.core.storage;
 
 import com.algaworks.algafood.domain.service.FotoStorageService;
-import com.algaworks.algafood.infrastucture.service.storage.LocalFotoStorageServiceImpl;
-import com.algaworks.algafood.infrastucture.service.storage.S3FotoStorageServiceImpl;
+import com.algaworks.algafood.infrastructure.service.storage.LocalFotoStorageServiceImpl;
+import com.algaworks.algafood.infrastructure.service.storage.S3FotoStorageServiceImpl;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;

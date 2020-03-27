@@ -13,7 +13,7 @@ import com.algaworks.algafood.domain.filter.PedidoFilter;
 import com.algaworks.algafood.domain.model.Pedido;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
-import com.algaworks.algafood.infrastucture.repository.spec.PedidoSpecs;
+import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
