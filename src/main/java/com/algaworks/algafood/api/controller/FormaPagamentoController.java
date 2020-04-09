@@ -49,7 +49,11 @@ public class FormaPagamentoController {
         FormaPagamentoModel formaPagamentoModel = formaPagamentoModelAssembler.toModel(formaPagamento);
         
         return ResponseEntity.ok()
-                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+//                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS)) (Padrao eh cachePublic)
+//                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate()) Cache nao pode ser compartilhado
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) // Cache pode ser compartilhado
+//                .cacheControl(CacheControl.noCache()) Sempre valida cache
+//                .cacheControl(CacheControl.noStore())  Nao armazena cache
                 .body(formaPagamentoModel);
     }
 
