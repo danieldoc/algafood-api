@@ -61,7 +61,19 @@ public class FormaPagamentoController {
     }
 
     @GetMapping("/{formaPagamentoId}")
-    public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long formaPagamentoId) {
+    public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long formaPagamentoId, ServletWebRequest request) {
+        ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+
+        String eTag = "0";
+
+        OffsetDateTime dataUltimaAtualizacao = formaPagamentoRepository.getDataUltimaAtualizacaoById(formaPagamentoId);
+
+        if (dataUltimaAtualizacao != null)
+            eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
+
+        if (request.checkNotModified(eTag))
+            return null;
+
         FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);
 
         FormaPagamentoModel formaPagamentoModel = formaPagamentoModelAssembler.toModel(formaPagamento);
@@ -72,6 +84,7 @@ public class FormaPagamentoController {
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) // Cache pode ser compartilhado
 //                .cacheControl(CacheControl.noCache()) Sempre valida cache
 //                .cacheControl(CacheControl.noStore())  Nao armazena cache
+                .eTag(eTag)
                 .body(formaPagamentoModel);
     }
 
