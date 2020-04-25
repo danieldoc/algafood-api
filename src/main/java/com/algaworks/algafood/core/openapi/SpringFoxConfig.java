@@ -34,6 +34,9 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                     .build()
                 .useDefaultResponseMessages(false)
                 .globalResponseMessage(RequestMethod.GET, globalGetResponseMessages())
+                .globalResponseMessage(RequestMethod.POST, globalPostPutResponseMessages())
+                .globalResponseMessage(RequestMethod.PUT, globalPostPutResponseMessages())
+                .globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessages())
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"));
     }
@@ -43,8 +46,41 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 new ResponseMessageBuilder()
                         .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                         .message("Erro interno do servidor")
+                        .build(),
+                new ResponseMessageBuilder()
+                        .code(HttpStatus.NOT_ACCEPTABLE.value())
+                        .message("Recurso nao possui representacao que poderia ser aceita pelo consumidor")
                         .build()
-                ,
+        );
+    }
+
+    private List<ResponseMessage> globalPostPutResponseMessages() {
+        return List.of(
+                new ResponseMessageBuilder()
+                        .code(HttpStatus.BAD_REQUEST.value())
+                        .message("Requisicao Invalida (Erro do consumidor)")
+                        .build(),
+                new ResponseMessageBuilder()
+                        .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .message("Erro interno do servidor")
+                        .build(),
+                new ResponseMessageBuilder()
+                        .code(HttpStatus.NOT_ACCEPTABLE.value())
+                        .message("Recurso nao possui representacao que poderia ser aceita pelo consumidor")
+                        .build(),
+                new ResponseMessageBuilder()
+                        .code(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value())
+                        .message("Requisicao recusada porque o corpo esta em um formato nao suportado")
+                        .build()
+        );
+    }
+
+    private List<ResponseMessage> globalDeleteResponseMessages() {
+        return List.of(
+                new ResponseMessageBuilder()
+                        .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .message("Erro interno do servidor")
+                        .build(),
                 new ResponseMessageBuilder()
                         .code(HttpStatus.NOT_ACCEPTABLE.value())
                         .message("Recurso nao possui representacao que poderia ser aceita pelo consumidor")
