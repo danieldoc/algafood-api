@@ -6,6 +6,7 @@ import com.algaworks.algafood.api.assembler.PedidoResumoModelAssembler;
 import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.PedidoInput;
+import com.algaworks.algafood.api.openapi.PedidoControllerOpenApi;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -15,19 +16,19 @@ import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
 import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
 import com.google.common.collect.ImmutableMap;
-import io.swagger.annotations.ApiImplicitParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("pedidos")
-public class PedidoController {
+@RequestMapping(path = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class PedidoController implements PedidoControllerOpenApi {
 
     @Autowired
     private EmissaoPedidoService cadastroPedido;
@@ -41,10 +42,10 @@ public class PedidoController {
     @Autowired
     private PedidoResumoModelAssembler pedidoResumoModelAssembler;
 
-    @ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por virgula",
-            name = "campos", paramType = "query", type = "string")
+    @Override
     @GetMapping
     public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable) {
+
         pageable = traduzirPageable(pageable);
 
         Page<Pedido> pedidoPage = cadastroPedido.listar(PedidoSpecs.construirFiltro(filtro), pageable);
@@ -54,29 +55,19 @@ public class PedidoController {
         return new PageImpl<>(pedidoResumoModels, pageable, pedidoPage.getTotalElements());
     }
 
-    private Pageable traduzirPageable(Pageable apiPageable) {
-        var mapeamento = ImmutableMap.of(
-                "codigo", "codigo",
-//                "subtotal", "subtotal",
-//                "taxaFrete", "taxaFrete",
-//                "valorTotal", "valorTotal",
-                "status", "status",
-                "dataCriacao", "dataCriacao",
-                "nomeCliente", "cliente.nome",
-                "restauranteNome", "restaurante.nome"
-        );
-        return PageableTranslator.translate(apiPageable, mapeamento);
-    }
-
-    @ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por virgula",
-            name = "campos", paramType = "query", type = "string")
+    @Override
     @GetMapping("/{codigoPedido}")
     public PedidoModel buscarPorCodigo(@PathVariable String codigoPedido) {
-        return pedidoModelAssembler.toModel(cadastroPedido.buscarOuFalhar(codigoPedido));
+
+        Pedido pedido = cadastroPedido.buscarOuFalhar(codigoPedido);
+
+        return pedidoModelAssembler.toModel(pedido);
     }
 
+    @Override
     @PostMapping
     public PedidoModel incluir(@RequestBody @Valid PedidoInput pedidoInput) {
+
         try {
             Pedido pedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
 
@@ -90,5 +81,21 @@ public class PedidoController {
         } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
+    }
+
+    private Pageable traduzirPageable(Pageable apiPageable) {
+
+        var mapeamento = ImmutableMap.of(
+                "codigo", "codigo",
+//                "subtotal", "subtotal",
+//                "taxaFrete", "taxaFrete",
+//                "valorTotal", "valorTotal",
+                "status", "status",
+                "dataCriacao", "dataCriacao"
+//                "nomeCliente", "cliente.nome",
+//                "restauranteNome", "restaurante.nome"
+        );
+
+        return PageableTranslator.translate(apiPageable, mapeamento);
     }
 }
