@@ -21,7 +21,7 @@ public interface CidadeControllerOpenApi {
     CidadeModel buscar(@ApiParam(value = "ID de uma cidade", example = "1")
                        Long cidadeId);
 
-    @ApiOperation("Cadastra uma cidade por ID")
+    @ApiOperation("Cadastra uma cidade")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Cidadade cadastrada")
     })
