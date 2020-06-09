@@ -7,7 +7,7 @@ import io.swagger.annotations.*;
 
 import java.util.List;
 
-@Api("Estados")
+@Api(tags = "Estados")
 public interface EstadoControllerOpenApi {
 
     @ApiOperation("Lista os estados")
