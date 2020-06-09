@@ -40,15 +40,14 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     @Autowired
     private FotoStorageService fotoStorage;
 
-    @Override
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Override
     public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId,
                                           @PathVariable Long produtoId,
-                                          @Valid FotoProdutoInput fotoProdutoInput) throws IOException {
+                                          @Valid FotoProdutoInput fotoProdutoInput,
+                                          @RequestPart MultipartFile arquivo) throws IOException {
 
         Produto produto = cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
-
-        MultipartFile arquivo = fotoProdutoInput.getArquivo();
 
         FotoProduto fotoProduto = new FotoProduto();
         fotoProduto.setProduto(produto);
@@ -61,8 +60,8 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         return fotoProdutoAssembler.toModel(foto);
     }
 
+    @GetMapping
     @Override
-    @GetMapping(produces = MediaType.ALL_VALUE)
     public FotoProdutoModel buscarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 
         FotoProduto fotoProduto = catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
@@ -70,8 +69,8 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         return fotoProdutoAssembler.toModel(fotoProduto);
     }
 
+    @GetMapping(produces = MediaType.ALL_VALUE)
     @Override
-    @GetMapping
     public ResponseEntity<?> servirFoto(@PathVariable Long restauranteId,
                                         @PathVariable Long produtoId,
                                         @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
@@ -100,9 +99,9 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         }
     }
 
-    @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
+    @Override
     public void excluirFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 
         catalogoFotoProdutoService.excluir(restauranteId, produtoId);
