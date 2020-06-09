@@ -22,7 +22,7 @@ public interface PedidoControllerOpenApi {
             @ApiResponse(code = 201, message = "Pedido registrado")
     })
     PedidoModel incluir(
-            @ApiParam(name = "corpo", value = "Representação de um novo pedido")
+            @ApiParam(name = "corpo", value = "Representação de um novo pedido", required = true)
             PedidoInput pedidoInput
     );
 
@@ -33,7 +33,7 @@ public interface PedidoControllerOpenApi {
             @ApiResponse(code = 404, message = "Pedido não encontrado", response = Problem.class)
     })
     PedidoModel buscarPorCodigo(
-            @ApiParam(value = "Código de um pedido", example = "90c52e48-05ff-49e5-b0d9-4b0b4105253f")
+            @ApiParam(value = "Código de um pedido", example = "90c52e48-05ff-49e5-b0d9-4b0b4105253f", required = true)
             String codigoPedido
     );
 }
