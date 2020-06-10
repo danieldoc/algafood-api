@@ -6,6 +6,7 @@ import com.algaworks.algafood.api.model.UsuarioModel;
 import com.algaworks.algafood.api.model.input.UsuarioInput;
 import com.algaworks.algafood.api.model.input.UsuarioSemSenhaInput;
 import com.algaworks.algafood.api.model.input.UsuarioSenhaInput;
+import com.algaworks.algafood.api.openapi.controller.UsuarioControllerOpenApi;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("usuarios")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerOpenApi {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -33,15 +34,18 @@ public class UsuarioController {
     private UsuarioInputDisassembler usuarioInputDisassembler;
 
     @GetMapping
+    @Override
     public List<UsuarioModel> listar() {
         return usuarioModelAssembler.toCollectionModel(usuarioRepository.findAll());
     }
 
     @GetMapping("/{usuarioId}")
+    @Override
     public UsuarioModel buscar(@PathVariable Long usuarioId) {
         return usuarioModelAssembler.toModel(cadastroUsuario.buscarOuFalhar(usuarioId));
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioModel adicionar(@RequestBody @Valid UsuarioInput usuarioInput) {
@@ -50,6 +54,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{usuarioId}")
+    @Override
     public UsuarioModel atualizar(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioSemSenhaInput usuarioInput) {
         Usuario usuarioAtual = cadastroUsuario.buscarOuFalhar(usuarioId);
 
@@ -58,14 +63,16 @@ public class UsuarioController {
         return usuarioModelAssembler.toModel(cadastroUsuario.salvar(usuarioAtual));
     }
 
-    @PutMapping("/{usuarioId}/senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping("/{usuarioId}/senha")
+    @Override
     public void atualizarSenha(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioSenhaInput usuarioSenhaInput) {
         cadastroUsuario.atualizarSenha(usuarioId, usuarioSenhaInput.getSenhaAtual(), usuarioSenhaInput.getNovaSenha());
     }
 
-    @DeleteMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{usuarioId}")
+    @Override
     public void remover(@PathVariable Long usuarioId) {
         cadastroUsuario.excluir(usuarioId);
     }
