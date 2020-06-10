@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.openapi.controller.EstatisticaControllerOpenApi;
 import com.algaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.algaworks.algafood.domain.model.dto.VendaDiaria;
 import com.algaworks.algafood.domain.service.VendaQueryService;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("estatisticas")
-public class EstatisticaController {
+public class EstatisticaController implements EstatisticaControllerOpenApi {
 
     @Autowired
     private VendaQueryService vendaQueryService;
@@ -26,14 +27,16 @@ public class EstatisticaController {
     private VendaReportService vendaReportService;
 
     @GetMapping(path = "vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Override
     public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filter,
                                                     @RequestParam(required = false, defaultValue = "+00:00") String offset) {
         return vendaQueryService.consultarVendasDiarias(filter, offset);
     }
 
     @GetMapping(path = "vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
+    @Override
     public ResponseEntity<byte[]> consultarVendasDiariasPdf(VendaDiariaFilter filter,
-                                                    @RequestParam(required = false, defaultValue = "+00:00") String offset) {
+                                                            @RequestParam(required = false, defaultValue = "+00:00") String offset) {
         byte[] bytes = vendaReportService.emitirVendasDiarias(filter, offset);
 
         var headers = new HttpHeaders();
