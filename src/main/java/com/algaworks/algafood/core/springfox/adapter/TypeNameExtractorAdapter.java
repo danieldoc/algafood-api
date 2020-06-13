@@ -1,22 +1,13 @@
 package com.algaworks.algafood.core.springfox.adapter;
 
-import static com.google.common.base.Optional.fromNullable;
-import static springfox.documentation.schema.Collections.containerType;
-import static springfox.documentation.schema.Collections.isContainerType;
-import static springfox.documentation.schema.Types.typeNameFor;
-
-import java.lang.reflect.Type;
-
-import org.springframework.context.annotation.Primary;
-import org.springframework.plugin.core.PluginRegistry;
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
-
+import org.springframework.context.annotation.Primary;
+import org.springframework.plugin.core.PluginRegistry;
+import org.springframework.stereotype.Component;
 import springfox.documentation.schema.DefaultTypeNameProvider;
 import springfox.documentation.schema.ModelNameContext;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -25,6 +16,13 @@ import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
+
+import java.lang.reflect.Type;
+
+import static com.google.common.base.Optional.fromNullable;
+import static springfox.documentation.schema.Collections.containerType;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.schema.Types.typeNameFor;
 
 @Primary
 @Component
