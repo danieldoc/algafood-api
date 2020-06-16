@@ -11,6 +11,7 @@ import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,27 +36,36 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 
     @GetMapping
     @Override
-    public List<UsuarioModel> listar() {
-        return usuarioModelAssembler.toCollectionModel(usuarioRepository.findAll());
+    public CollectionModel<UsuarioModel> listar() {
+
+        List<Usuario> usuarios = usuarioRepository.findAll();
+
+        return usuarioModelAssembler.toCollectionModel(usuarios);
     }
 
     @GetMapping("/{usuarioId}")
     @Override
     public UsuarioModel buscar(@PathVariable Long usuarioId) {
-        return usuarioModelAssembler.toModel(cadastroUsuario.buscarOuFalhar(usuarioId));
+
+        Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
+
+        return usuarioModelAssembler.toModel(usuario);
     }
 
-    @Override
-    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    @Override
     public UsuarioModel adicionar(@RequestBody @Valid UsuarioInput usuarioInput) {
+
         Usuario usuario = usuarioInputDisassembler.toDomainObject(usuarioInput);
+
         return usuarioModelAssembler.toModel(cadastroUsuario.salvar(usuario));
     }
 
     @PutMapping("/{usuarioId}")
     @Override
     public UsuarioModel atualizar(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioSemSenhaInput usuarioInput) {
+
         Usuario usuarioAtual = cadastroUsuario.buscarOuFalhar(usuarioId);
 
         usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuarioAtual);
@@ -67,6 +77,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     @PutMapping("/{usuarioId}/senha")
     @Override
     public void atualizarSenha(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioSenhaInput usuarioSenhaInput) {
+
         cadastroUsuario.atualizarSenha(usuarioId, usuarioSenhaInput.getSenhaAtual(), usuarioSenhaInput.getNovaSenha());
     }
 

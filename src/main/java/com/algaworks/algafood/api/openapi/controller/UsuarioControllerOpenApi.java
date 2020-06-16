@@ -6,14 +6,13 @@ import com.algaworks.algafood.api.model.input.UsuarioInput;
 import com.algaworks.algafood.api.model.input.UsuarioSemSenhaInput;
 import com.algaworks.algafood.api.model.input.UsuarioSenhaInput;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Usuarios")
 public interface UsuarioControllerOpenApi {
 
     @ApiOperation("Lista os usuários")
-    List<UsuarioModel> listar();
+    CollectionModel<UsuarioModel> listar();
 
     @ApiOperation("Busca um usuário por ID")
     @ApiResponses({
