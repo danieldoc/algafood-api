@@ -12,6 +12,7 @@ import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,10 +40,37 @@ public class CidadeController implements CidadeControllerOpenApi {
     @Autowired
     private CidadeInputDisassembler cidadeInputDisassembler;
 
-    @Override
     @GetMapping
-    public List<CidadeModel> listar() {
-        return cidadeModelAssembler.toCollectionModel(cidadeRepository.findAll());
+    @Override
+    public CollectionModel<CidadeModel> listar() {
+
+        List<Cidade> cidades = cidadeRepository.findAll();
+
+        List<CidadeModel> cidadesModel = cidadeModelAssembler.toCollectionModel(cidades);
+
+        cidadesModel.forEach(cidadeModel -> {
+
+            Link linkCidadeId = linkTo(methodOn(CidadeController.class)
+                    .buscar(cidadeModel.getId()))
+                    .withSelfRel();
+            cidadeModel.add(linkCidadeId);
+
+            Link linkCidades = linkTo(methodOn(CidadeController.class)
+                    .listar())
+                    .withRel("cidades");
+            cidadeModel.add(linkCidades);
+
+            Link linkEstadoId = linkTo(methodOn(EstadoController.class)
+                    .buscar(cidadeModel.getEstado().getId()))
+                    .withSelfRel();
+            cidadeModel.getEstado().add(linkEstadoId);
+        });
+
+        CollectionModel<CidadeModel> cidadesCollectionModel = new CollectionModel<>(cidadesModel);
+
+        cidadesCollectionModel.add(linkTo(methodOn(CidadeController.class).listar()).withSelfRel());
+
+        return cidadesCollectionModel;
     }
 
     @Override
@@ -88,9 +116,7 @@ public class CidadeController implements CidadeControllerOpenApi {
                 .buscar(cidadeModel.getEstado().getId()))
                 .withSelfRel();
 
-        cidadeModel.getEstado().add(
-                linkEstadoId
-        );
+        cidadeModel.getEstado().add(linkEstadoId);
 
         return cidadeModel;
     }
