@@ -13,13 +13,15 @@ import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path = "cidades", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -51,27 +53,43 @@ public class CidadeController implements CidadeControllerOpenApi {
 
         CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
 
-
 //        cidadeModel.add(new Link("http://localhost:8080/cidades/1", IanaLinkRelations.SELF));
 //        cidadeModel.add(new Link("http://localhost:8080/cidades/1"));
-        cidadeModel.add(
-                WebMvcLinkBuilder.linkTo(CidadeController.class)
-                        .slash(cidadeModel.getId())
-                        .withSelfRel()
-        );
+//        cidadeModel.add(
+//                WebMvcLinkBuilder.linkTo(CidadeController.class)
+//                        .slash(cidadeModel.getId())
+//                        .withSelfRel()
+//        );
+        Link linkCidadeId = linkTo(methodOn(CidadeController.class)
+                .buscar(cidadeModel.getId()))
+                .withSelfRel();
+        cidadeModel.add(linkCidadeId);
 
 //        cidadeModel.add(new Link("http://localhost:8080/cidades", "cidades"));
 //        cidadeModel.add(new Link("http://localhost:8080/cidades", IanaLinkRelations.COLLECTION));
-        cidadeModel.add(
-                WebMvcLinkBuilder.linkTo(CidadeController.class)
-                        .withRel("cidades")
-        );
+//        cidadeModel.add(
+//                WebMvcLinkBuilder.linkTo(CidadeController.class)
+//                        .withRel("cidades")
+//        );
+
+        Link linkCidades = linkTo(methodOn(CidadeController.class)
+                .listar())
+                .withRel("cidades");
+
+        cidadeModel.add(linkCidades);
 
 //        cidadeModel.getEstado().add(new Link("http://localhost:8080/estados/1"));
+
+//        WebMvcLinkBuilder.linkTo(EstadoController.class)
+//                .slash(cidadeModel.getEstado().getId())
+//                .withSelfRel();
+
+        Link linkEstadoId = linkTo(methodOn(EstadoController.class)
+                .buscar(cidadeModel.getEstado().getId()))
+                .withSelfRel();
+
         cidadeModel.getEstado().add(
-                WebMvcLinkBuilder.linkTo(EstadoController.class)
-                        .slash(cidadeModel.getEstado().getId())
-                        .withSelfRel()
+                linkEstadoId
         );
 
         return cidadeModel;
