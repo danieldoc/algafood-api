@@ -13,16 +13,12 @@ import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path = "cidades", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,31 +42,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
         List<Cidade> cidades = cidadeRepository.findAll();
 
-        List<CidadeModel> cidadesModel = cidadeModelAssembler.toCollectionModel(cidades);
-
-        cidadesModel.forEach(cidadeModel -> {
-
-            Link linkCidadeId = linkTo(methodOn(CidadeController.class)
-                    .buscar(cidadeModel.getId()))
-                    .withSelfRel();
-            cidadeModel.add(linkCidadeId);
-
-            Link linkCidades = linkTo(methodOn(CidadeController.class)
-                    .listar())
-                    .withRel("cidades");
-            cidadeModel.add(linkCidades);
-
-            Link linkEstadoId = linkTo(methodOn(EstadoController.class)
-                    .buscar(cidadeModel.getEstado().getId()))
-                    .withSelfRel();
-            cidadeModel.getEstado().add(linkEstadoId);
-        });
-
-        CollectionModel<CidadeModel> cidadesCollectionModel = new CollectionModel<>(cidadesModel);
-
-        cidadesCollectionModel.add(linkTo(methodOn(CidadeController.class).listar()).withSelfRel());
-
-        return cidadesCollectionModel;
+        return cidadeModelAssembler.toCollectionModel(cidades);
     }
 
     @Override
@@ -79,46 +51,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
         Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
 
-        CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
-
-//        cidadeModel.add(new Link("http://localhost:8080/cidades/1", IanaLinkRelations.SELF));
-//        cidadeModel.add(new Link("http://localhost:8080/cidades/1"));
-//        cidadeModel.add(
-//                WebMvcLinkBuilder.linkTo(CidadeController.class)
-//                        .slash(cidadeModel.getId())
-//                        .withSelfRel()
-//        );
-        Link linkCidadeId = linkTo(methodOn(CidadeController.class)
-                .buscar(cidadeModel.getId()))
-                .withSelfRel();
-        cidadeModel.add(linkCidadeId);
-
-//        cidadeModel.add(new Link("http://localhost:8080/cidades", "cidades"));
-//        cidadeModel.add(new Link("http://localhost:8080/cidades", IanaLinkRelations.COLLECTION));
-//        cidadeModel.add(
-//                WebMvcLinkBuilder.linkTo(CidadeController.class)
-//                        .withRel("cidades")
-//        );
-
-        Link linkCidades = linkTo(methodOn(CidadeController.class)
-                .listar())
-                .withRel("cidades");
-
-        cidadeModel.add(linkCidades);
-
-//        cidadeModel.getEstado().add(new Link("http://localhost:8080/estados/1"));
-
-//        WebMvcLinkBuilder.linkTo(EstadoController.class)
-//                .slash(cidadeModel.getEstado().getId())
-//                .withSelfRel();
-
-        Link linkEstadoId = linkTo(methodOn(EstadoController.class)
-                .buscar(cidadeModel.getEstado().getId()))
-                .withSelfRel();
-
-        cidadeModel.getEstado().add(linkEstadoId);
-
-        return cidadeModel;
+        return cidadeModelAssembler.toModel(cidade);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
