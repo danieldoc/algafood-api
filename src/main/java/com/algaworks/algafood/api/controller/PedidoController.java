@@ -18,13 +18,13 @@ import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,17 +42,18 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private PedidoResumoModelAssembler pedidoResumoModelAssembler;
 
+    @Autowired
+    private PagedResourcesAssembler<Pedido> pedidoPagedResourcesAssembler;
+
     @Override
     @GetMapping
-    public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable) {
+    public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, Pageable pageable) {
 
         pageable = traduzirPageable(pageable);
 
         Page<Pedido> pedidoPage = cadastroPedido.listar(PedidoSpecs.construirFiltro(filtro), pageable);
 
-        List<PedidoResumoModel> pedidoResumoModels = pedidoResumoModelAssembler.toCollectionModel(pedidoPage.getContent());
-
-        return new PageImpl<>(pedidoResumoModels, pageable, pedidoPage.getTotalElements());
+        return pedidoPagedResourcesAssembler.toModel(pedidoPage, pedidoResumoModelAssembler);
     }
 
     @Override
