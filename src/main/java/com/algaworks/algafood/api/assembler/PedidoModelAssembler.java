@@ -1,17 +1,13 @@
 package com.algaworks.algafood.api.assembler;
 
 import com.algaworks.algafood.api.AlgaLinks;
-import com.algaworks.algafood.api.controller.*;
+import com.algaworks.algafood.api.controller.PedidoController;
 import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pedido, PedidoModel> {
@@ -33,36 +29,26 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
 
         modelMapper.map(pedido, pedidoModel);
 
-
         pedidoModel.add(algaLinks.linkToPedidos());
 
-        Link linkRestauranteId = linkTo(methodOn(RestauranteController.class)
-                .buscar(pedidoModel.getRestaurante().getId()))
-                .withSelfRel();
-        pedidoModel.getRestaurante().add(linkRestauranteId);
+        Long restauranteId = pedidoModel.getRestaurante().getId();
+        pedidoModel.getRestaurante()
+                .add(algaLinks.linkToRestaurante(restauranteId));
 
-        Link linkClienteId = linkTo(methodOn(UsuarioController.class)
-                .buscar(pedidoModel.getCliente().getId()))
-                .withSelfRel();
-        pedidoModel.getCliente().add(linkClienteId);
+        Long usuarioId = pedidoModel.getCliente().getId();
+        pedidoModel.getCliente()
+                .add(algaLinks.linkToUsuario(usuarioId));
 
-        Link linkFormaPagamentoId = linkTo(methodOn(FormaPagamentoController.class)
-                .buscar(pedidoModel.getFormaPagamento().getId(), null))
-                .withSelfRel();
-        pedidoModel.getFormaPagamento().add(linkFormaPagamentoId);
+        Long formaPagamentoId = pedidoModel.getFormaPagamento().getId();
+        pedidoModel.getFormaPagamento()
+                .add(algaLinks.linkToFormaPagamento(formaPagamentoId));
 
-        Link linkEnderecoEntregaId = linkTo(methodOn(CidadeController.class)
-                .buscar(pedidoModel.getEnderecoEntrega().getCidade().getId()))
-                .withSelfRel();
-        pedidoModel.getEnderecoEntrega().getCidade().add(linkEnderecoEntregaId);
+        Long cidadeId = pedidoModel.getEnderecoEntrega().getCidade().getId();
+        pedidoModel.getEnderecoEntrega().getCidade()
+                .add(algaLinks.linkToCidade(cidadeId));
 
-        pedidoModel.getItens().forEach(item -> {
-
-            Link linkProduto = linkTo(methodOn(RestauranteProdutoController.class)
-                    .buscar(pedidoModel.getRestaurante().getId(), item.getProdutoId()))
-                    .withRel("produto");
-            item.add(linkProduto);
-        });
+        pedidoModel.getItens().forEach(item ->
+                item.add(algaLinks.linkToProduto(restauranteId, item.getProdutoId(), "produto")));
 
         return pedidoModel;
     }
