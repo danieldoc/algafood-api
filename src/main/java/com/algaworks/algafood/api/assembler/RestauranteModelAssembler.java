@@ -48,6 +48,18 @@ public class RestauranteModelAssembler extends RepresentationModelAssemblerSuppo
 
         restauranteModel.add(algaLinks.linkToResponsaveisRestaurante(restauranteModel.getId(), "responsaveis"));
 
+        if (restaurante.ativacaoPermitida())
+            restauranteModel.add(algaLinks.linkToAtivacaoRestaurante(restauranteModel.getId(), "ativar"));
+
+        if (restaurante.inativacaoPermitida())
+            restauranteModel.add(algaLinks.linkToInativacaoRestaurante(restauranteModel.getId(), "inativar"));
+
+        if (restaurante.aberturaPermitida())
+            restauranteModel.add(algaLinks.linkToAberturaRestaurante(restauranteModel.getId(), "abrir"));
+
+        if (restaurante.fechamentoPermitido())
+            restauranteModel.add(algaLinks.linkToFechamentoRestaurante(restauranteModel.getId(), "fechar"));
+
         return restauranteModel;
     }
 
