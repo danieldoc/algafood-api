@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,22 +32,29 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
-        return formaPagamentoModelAssembler.toCollectionModel(restaurante.getFormasPagamento())
+        var formasPagamentoModel = formaPagamentoModelAssembler.toCollectionModel(restaurante.getFormasPagamento())
                 .removeLinks()
                 .add(algaLinks.linkToRestauranteFormasPagamento(restauranteId));
+
+        formasPagamentoModel.forEach(formaPagamentoModel ->
+                formaPagamentoModel.add(algaLinks.linkToRestauranteFormaPagamentoDesassociacao(restauranteId, formaPagamentoModel.getId(), "desassociar")));
+
+        return formasPagamentoModel;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("{formaPagamentoId}")
     @Override
-    public void desassociar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
-         cadastroRestaurante.desassociarFormaPagamento(restauranteId, formaPagamentoId);
+    public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
+        cadastroRestaurante.desassociarFormaPagamento(restauranteId, formaPagamentoId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("{formaPagamentoId}")
     @Override
     public void associar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
-         cadastroRestaurante.associarFormaPagamento(restauranteId, formaPagamentoId);
+        cadastroRestaurante.associarFormaPagamento(restauranteId, formaPagamentoId);
     }
 }

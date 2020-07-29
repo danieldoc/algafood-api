@@ -180,6 +180,11 @@ public class AlgaLinks {
                 .withRel(rel);
     }
 
+    public Link linkToRestauranteFormaPagamentoDesassociacao(Long restauranteId, Long formaPagamentoId, String rel) {
+        return linkTo(methodOn(RestauranteFormaPagamentoController.class).desassociar(restauranteId, formaPagamentoId))
+                .withRel(rel);
+    }
+
     public Link linkToAtivacaoRestaurante(Long restauranteId, String rel) {
         return linkTo(methodOn(RestauranteController.class).ativar(restauranteId))
                 .withRel(rel);
