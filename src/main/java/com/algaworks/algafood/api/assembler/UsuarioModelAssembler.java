@@ -10,9 +10,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Component
 public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<Usuario, UsuarioModel> {
 
@@ -44,6 +41,6 @@ public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<U
     public CollectionModel<UsuarioModel> toCollectionModel(Iterable<? extends Usuario> entities) {
 
         return super.toCollectionModel(entities)
-                .add(linkTo(methodOn(UsuarioController.class).listar()).withSelfRel());
+                .add(algaLinks.linkToUsuarios());
     }
 }
