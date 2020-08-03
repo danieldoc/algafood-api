@@ -1,6 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
-import com.algaworks.algafood.api.assembler.FotoProdutoAssembler;
+import com.algaworks.algafood.api.assembler.FotoProdutoModelAssembler;
 import com.algaworks.algafood.api.model.FotoProdutoModel;
 import com.algaworks.algafood.api.model.input.FotoProdutoInput;
 import com.algaworks.algafood.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
@@ -35,7 +35,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     private CadastroProdutoService cadastroProdutoService;
 
     @Autowired
-    private FotoProdutoAssembler fotoProdutoAssembler;
+    private FotoProdutoModelAssembler fotoProdutoModelAssembler;
 
     @Autowired
     private FotoStorageService fotoStorage;
@@ -57,7 +57,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
         fotoProduto.setNomeArquivo(arquivo.getOriginalFilename());
 
         FotoProduto foto = catalogoFotoProdutoService.salvar(fotoProduto, arquivo.getInputStream());
-        return fotoProdutoAssembler.toModel(foto);
+        return fotoProdutoModelAssembler.toModel(foto);
     }
 
     @GetMapping
@@ -66,7 +66,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 
         FotoProduto fotoProduto = catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
 
-        return fotoProdutoAssembler.toModel(fotoProduto);
+        return fotoProdutoModelAssembler.toModel(fotoProduto);
     }
 
     @GetMapping(produces = MediaType.ALL_VALUE)
