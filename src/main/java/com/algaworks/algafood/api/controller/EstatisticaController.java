@@ -1,5 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.AlgaLinks;
+import com.algaworks.algafood.api.model.EstatisticasModel;
 import com.algaworks.algafood.api.openapi.controller.EstatisticaControllerOpenApi;
 import com.algaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.algaworks.algafood.domain.model.dto.VendaDiaria;
@@ -25,6 +27,19 @@ public class EstatisticaController implements EstatisticaControllerOpenApi {
 
     @Autowired
     private VendaReportService vendaReportService;
+
+    @Autowired
+    private AlgaLinks algaLinks;
+
+    @Override
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public EstatisticasModel estatisticas() {
+        var estatisticasModel = new EstatisticasModel();
+
+        estatisticasModel.add(algaLinks.linkToEstatisticasVendasDiarias("vendas-diaria"));
+
+        return estatisticasModel;
+    }
 
     @GetMapping(path = "vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     @Override

@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.awt.*;
-
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class RootEntryPointController {
@@ -31,6 +29,7 @@ public class RootEntryPointController {
         rootEntryPointModel.add(algaLinks.linkToFormasPagamento("formas-pagamento"));
         rootEntryPointModel.add(algaLinks.linkToEstados("estados"));
         rootEntryPointModel.add(algaLinks.linkToCidades("cidades"));
+        rootEntryPointModel.add(algaLinks.linkToEstatisticas("estatisticas"));
 
         return rootEntryPointModel;
     }
