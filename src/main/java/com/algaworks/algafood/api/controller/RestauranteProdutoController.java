@@ -10,6 +10,7 @@ import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.CadastroProdutoService;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -35,12 +36,12 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 
     @GetMapping
     @Override
-    public List<ProdutoModel> listar(@PathVariable Long restauranteId,
-                                     @RequestParam(required = false) boolean incluirInativos) {
+    public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId,
+                                                @RequestParam(required = false) Boolean incluirInativos) {
         Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(restauranteId);
 
         List<Produto> produtos;
-        if (incluirInativos)
+        if (Boolean.TRUE.equals(incluirInativos))
             produtos = cadastroProdutoService.buscarTodosPorRestaurante(restaurante);
         else
             produtos = cadastroProdutoService.buscarAtivosPorRestaurante(restaurante);
