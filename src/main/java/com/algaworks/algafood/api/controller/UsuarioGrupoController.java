@@ -6,11 +6,10 @@ import com.algaworks.algafood.api.openapi.controller.UsuarioGrupoControllerOpenA
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "usuarios/{usuarioId}/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -24,9 +23,10 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 
     @Override
     @GetMapping
-    public List<GrupoModel> listar(@PathVariable Long usuarioId) {
+    public CollectionModel<GrupoModel> listar(@PathVariable Long usuarioId) {
         Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
-        return grupoModelAssembler.toCollectionModel(usuario.getGrupos());
+        return grupoModelAssembler.toCollectionModel(usuario.getGrupos())
+                .removeLinks();
     }
 
     @Override
