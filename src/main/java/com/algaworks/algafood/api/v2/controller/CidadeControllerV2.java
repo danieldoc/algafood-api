@@ -5,6 +5,7 @@ import com.algaworks.algafood.api.v2.assembler.CidadeInputDisassemblerV2;
 import com.algaworks.algafood.api.v2.assembler.CidadeModelAssemblerV2;
 import com.algaworks.algafood.api.v2.model.CidadeModelV2;
 import com.algaworks.algafood.api.v2.model.input.CidadeInputV2;
+import com.algaworks.algafood.api.v2.openapi.controller.CidadeControllerOpenApiV2;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Cidade;
@@ -22,7 +23,7 @@ import java.util.List;
 @RestController
 //@RequestMapping(path = "cidades", produces = AlgaMediaTypes.V2_APPLICATION_JSON_VALUE)
 @RequestMapping(path = "/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CidadeControllerV2 {
+public class CidadeControllerV2 implements CidadeControllerOpenApiV2 {
 
     @Autowired
     private CidadeRepository cidadeRepository;
@@ -37,6 +38,7 @@ public class CidadeControllerV2 {
     private CidadeInputDisassemblerV2 cidadeInputDisassembler;
 
     @GetMapping
+    @Override
     public CollectionModel<CidadeModelV2> listar() {
 
         List<Cidade> cidades = cidadeRepository.findAll();
@@ -45,6 +47,7 @@ public class CidadeControllerV2 {
     }
 
     @GetMapping("/{cidadeId}")
+    @Override
     public CidadeModelV2 buscar(@PathVariable Long cidadeId) {
 
         Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
@@ -54,6 +57,7 @@ public class CidadeControllerV2 {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
+    @Override
     public CidadeModelV2 adicionar(@RequestBody @Valid CidadeInputV2 cidadeInput) {
 
         try {
@@ -72,6 +76,7 @@ public class CidadeControllerV2 {
     }
 
     @PutMapping("/{cidadeId}")
+    @Override
     public CidadeModelV2 atualizar(@PathVariable Long cidadeId,
                                    @RequestBody @Valid CidadeInputV2 cidadeInput) {
         Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
@@ -87,6 +92,7 @@ public class CidadeControllerV2 {
 
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Override
     public void remover(@PathVariable Long cidadeId) {
         cadastroCidade.excluir(cidadeId);
     }

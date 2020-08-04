@@ -3,7 +3,10 @@ package com.algaworks.algafood.core.springfox;
 import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.v1.model.*;
 import com.algaworks.algafood.api.v1.openapi.model.*;
+import com.algaworks.algafood.api.v2.model.CidadeModelV2;
 import com.algaworks.algafood.api.v2.model.CozinhaModelV2;
+import com.algaworks.algafood.api.v2.openapi.model.CidadesModelOpenApiV2;
+import com.algaworks.algafood.api.v2.openapi.model.CozinhasModelOpenApiV2;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -143,6 +146,15 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                         File.class, InputStream.class, Resource.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .directModelSubstitute(Links.class, LinksModelOpenApi.class)
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(PagedModel.class, CozinhaModelV2.class),
+                        CozinhasModelOpenApiV2.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, CidadeModelV2.class),
+                        CidadesModelOpenApiV2.class))
+                .tags(
+                    new Tag("Cidades", "Gerencia as cidades"),
+                    new Tag("Cozinhas", "Gerencia as cozinhas"))
                 .apiInfo(apiInfoV2());
     }
 

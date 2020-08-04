@@ -4,6 +4,7 @@ import com.algaworks.algafood.api.v2.assembler.CozinhaInputDisassemblerV2;
 import com.algaworks.algafood.api.v2.assembler.CozinhaModelAssemblerV2;
 import com.algaworks.algafood.api.v2.model.CozinhaModelV2;
 import com.algaworks.algafood.api.v2.model.input.CozinhaInputV2;
+import com.algaworks.algafood.api.v2.openapi.controller.CozinhaControllerOpenApiV2;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
@@ -21,7 +22,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/v2/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CozinhaControllerV2 {
+public class CozinhaControllerV2 implements CozinhaControllerOpenApiV2 {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
@@ -39,6 +40,7 @@ public class CozinhaControllerV2 {
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
     @GetMapping
+    @Override
     public PagedModel<CozinhaModelV2> listar(@PageableDefault(size = 10) Pageable pageable) {
 
         Page<Cozinha> cozinhaPage = cozinhaRepository.findAll(pageable);
@@ -47,6 +49,7 @@ public class CozinhaControllerV2 {
     }
 
     @GetMapping("/{cozinhaId}")
+    @Override
     public CozinhaModelV2 buscar(@PathVariable Long cozinhaId) {
 
         Cozinha cozinha = cadastroCozinha.buscarOuFalhar(cozinhaId);
@@ -56,6 +59,7 @@ public class CozinhaControllerV2 {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Override
     public CozinhaModelV2 adicionar(@RequestBody @Valid CozinhaInputV2 cozinhaInput) {
 
         Cozinha cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
@@ -66,6 +70,7 @@ public class CozinhaControllerV2 {
     }
 
     @PutMapping("/{cozinhaId}")
+    @Override
     public CozinhaModelV2 atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid CozinhaInputV2 cozinhaInput) {
 
         Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(cozinhaId);
@@ -79,6 +84,7 @@ public class CozinhaControllerV2 {
 
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Override
     public void remover(@PathVariable Long cozinhaId) {
         cadastroCozinha.excluir(cozinhaId);
     }
