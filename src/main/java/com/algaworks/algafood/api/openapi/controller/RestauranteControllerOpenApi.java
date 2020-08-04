@@ -8,6 +8,7 @@ import com.algaworks.algafood.api.model.input.RestauranteInput;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,6 +25,7 @@ public interface RestauranteControllerOpenApi {
                                                    BigDecimal taxaFreteInicial,
                                                    BigDecimal taxaFreteFinal);
 
+    @ApiIgnore
     @ApiOperation(value = "Lista restaurantes", hidden = true)
     CollectionModel<RestauranteApenasNomeModel> listarApenasNome(String nome,
                                                                  BigDecimal taxaFreteInicial,
