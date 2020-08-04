@@ -5,7 +5,6 @@ import com.algaworks.algafood.api.model.RestauranteApenasNomeModel;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.RestauranteResumoModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
-import com.algaworks.algafood.api.openapi.model.RestauranteBasicoModelOpenApi;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +15,19 @@ import java.util.List;
 @Api(tags = "Restaurantes")
 public interface RestauranteControllerOpenApi {
 
-    @ApiOperation(value = "Lista restaurantes", response = RestauranteBasicoModelOpenApi.class)
+    @ApiOperation("Lista restaurantes")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
-            name = "projecao", paramType = "query", type = "string")
+                    name = "projecao", paramType = "query", type = "string")
     })
     CollectionModel<RestauranteResumoModel> listar(String nome,
-                                  BigDecimal taxaFreteInicial,
-                                  BigDecimal taxaFreteFinal);
+                                                   BigDecimal taxaFreteInicial,
+                                                   BigDecimal taxaFreteFinal);
 
     @ApiOperation(value = "Lista restaurantes", hidden = true)
     CollectionModel<RestauranteApenasNomeModel> listarApenasNome(String nome,
-                                            BigDecimal taxaFreteInicial,
-                                            BigDecimal taxaFreteFinal);
+                                                                 BigDecimal taxaFreteInicial,
+                                                                 BigDecimal taxaFreteFinal);
 
     @ApiOperation("Busca um restaurante por ID")
     @ApiResponses({
@@ -37,7 +36,7 @@ public interface RestauranteControllerOpenApi {
     })
     RestauranteModel buscar(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId
+                    Long restauranteId
     );
 
     @ApiOperation("Cadastra um restaurante")
@@ -46,7 +45,7 @@ public interface RestauranteControllerOpenApi {
     })
     RestauranteModel adicionar(
             @ApiParam(name = "corpo", value = "Representação de um novo restaurante", required = true)
-            RestauranteInput restauranteInput
+                    RestauranteInput restauranteInput
     );
 
     @ApiOperation("Atualiza um restaurante por ID")
@@ -56,10 +55,10 @@ public interface RestauranteControllerOpenApi {
     })
     RestauranteModel atualizar(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId,
+                    Long restauranteId,
 
             @ApiParam(name = "corpo", value = "Representação de um restaurante com os novos dados", required = true)
-            RestauranteInput restauranteInput
+                    RestauranteInput restauranteInput
     );
 
     @ApiOperation("Ativa um restaurante por ID")
@@ -69,7 +68,7 @@ public interface RestauranteControllerOpenApi {
     })
     ResponseEntity<Void> ativar(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId
+                    Long restauranteId
     );
 
     @ApiOperation("Inativa um restaurante por ID")
@@ -79,7 +78,7 @@ public interface RestauranteControllerOpenApi {
     })
     ResponseEntity<Void> inativar(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId
+                    Long restauranteId
     );
 
     @ApiOperation("Ativa múltiplos restaurantes")
@@ -88,7 +87,7 @@ public interface RestauranteControllerOpenApi {
     })
     void ativarMultiplos(
             @ApiParam(name = "corpo", value = "IDs de restaurantes", required = true)
-            List<Long> restauranteIds
+                    List<Long> restauranteIds
     );
 
     @ApiOperation("Inativa múltiplos restaurantes")
@@ -97,7 +96,7 @@ public interface RestauranteControllerOpenApi {
     })
     void inativarMultiplos(
             @ApiParam(name = "corpo", value = "IDs de restaurantes", required = true)
-            List<Long> restauranteIds
+                    List<Long> restauranteIds
     );
 
     @ApiOperation("Abre um restaurante por ID")
@@ -107,7 +106,7 @@ public interface RestauranteControllerOpenApi {
     })
     ResponseEntity<Void> abrir(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId
+                    Long restauranteId
     );
 
     @ApiOperation("Fecha um restaurante por ID")
@@ -117,6 +116,6 @@ public interface RestauranteControllerOpenApi {
     })
     ResponseEntity<Void> fechar(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId
+                    Long restauranteId
     );
 }
