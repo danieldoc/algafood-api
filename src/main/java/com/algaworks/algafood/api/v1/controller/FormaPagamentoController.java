@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping(path = "/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/formas-pagamento", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
     @Autowired
@@ -84,7 +84,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);
 
         FormaPagamentoModel formaPagamentoModel = formaPagamentoModelAssembler.toModel(formaPagamento);
-        
+
         return ResponseEntity.ok()
 //                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS)) (Padrao eh cachePublic)
 //                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate()) Cache nao pode ser compartilhado
