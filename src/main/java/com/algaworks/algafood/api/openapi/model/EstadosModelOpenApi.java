@@ -14,12 +14,12 @@ import java.util.List;
 @Setter
 public class EstadosModelOpenApi {
 
-    private EstadoEmbeddedModelOpenApi _embedded;
+    private EstadosEmbeddedModelOpenApi _embedded;
     private Links _links;
 
-    @ApiModel("EstadosEmbeddedModelOpenApi")
+    @ApiModel("EstadosEmbeddedModel")
     @Data
-    public class EstadoEmbeddedModelOpenApi {
+    public class EstadosEmbeddedModelOpenApi {
 
         private List<EstadoModel> estados;
     }

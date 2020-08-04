@@ -14,12 +14,12 @@ import java.util.List;
 @Setter
 public class PermissoesModelOpenApi {
 
-    private PermissaoEmbeddedModelOpenApi _embedded;
+    private PermissoesEmbeddedModelOpenApi _embedded;
     private Links _links;
 
-    @ApiModel("PermissaoEmbeddedModelOpenApi")
+    @ApiModel("PermissoesEmbeddedModel")
     @Data
-    public class PermissaoEmbeddedModelOpenApi {
+    public class PermissoesEmbeddedModelOpenApi {
 
         private List<PermissaoModel> permissoes;
     }

@@ -14,12 +14,12 @@ import java.util.List;
 @Setter
 public class FormasPagamentoModelOpenApi {
 
-    private FormaPagamentoEmbeddedModelOpenApi _embedded;
+    private FormasPagamentoEmbeddedModelOpenApi _embedded;
     private Links _links;
 
-    @ApiModel("FormasPagamentoEmbeddedModelOpenApi")
+    @ApiModel("FormasPagamentoEmbeddedModel")
     @Data
-    public class FormaPagamentoEmbeddedModelOpenApi {
+    public class FormasPagamentoEmbeddedModelOpenApi {
 
         private List<FormaPagamentoModel> formasPagamento;
     }

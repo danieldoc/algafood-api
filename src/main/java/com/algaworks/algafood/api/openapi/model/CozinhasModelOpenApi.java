@@ -14,13 +14,13 @@ import java.util.List;
 @Setter
 public class CozinhasModelOpenApi {
 
-    private CozinhasModelOpenApi.CozinhaEmbeddedModelOpenApi _embedded;
+    private CozinhasEmbeddedModelOpenApi _embedded;
     private Links _links;
     private PageModelOpenApi page;
 
-    @ApiModel("CozinhasEmbeddedModelOpenApi")
+    @ApiModel("CozinhasEmbeddedModel")
     @Data
-    public class CozinhaEmbeddedModelOpenApi {
+    public class CozinhasEmbeddedModelOpenApi {
 
         private List<CozinhaModel> cozinhas;
     }

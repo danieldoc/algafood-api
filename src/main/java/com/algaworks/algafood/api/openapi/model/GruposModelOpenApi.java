@@ -14,12 +14,12 @@ import java.util.List;
 @Setter
 public class GruposModelOpenApi {
 
-    private GrupoEmbeddedModelOpenApi _embedded;
+    private GruposEmbeddedModelOpenApi _embedded;
     private Links _links;
 
-    @ApiModel("GruposEmbeddedModelOpenApi")
+    @ApiModel("GruposEmbeddedModel")
     @Data
-    public class GrupoEmbeddedModelOpenApi {
+    public class GruposEmbeddedModelOpenApi {
 
         private List<GrupoModel> grupos;
     }

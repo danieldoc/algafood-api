@@ -91,6 +91,9 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, PermissaoModel.class),
                         PermissoesModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(PagedModel.class, PedidoResumoModel.class),
+                        PedidosResumoModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(
                         new Tag("Cidades", "Gerencia as cidades"),
