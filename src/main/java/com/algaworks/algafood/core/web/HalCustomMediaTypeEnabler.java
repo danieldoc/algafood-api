@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import java.util.Arrays;
 
 import static com.algaworks.algafood.core.web.AlgaMediaTypes.V1_APPLICATION_JSON;
+import static com.algaworks.algafood.core.web.AlgaMediaTypes.V2_APPLICATION_JSON;
 
 @Component
 public class HalCustomMediaTypeEnabler {
@@ -29,7 +30,7 @@ public class HalCustomMediaTypeEnabler {
                     && converter.getSupportedMediaTypes().contains(MediaTypes.HAL_JSON)) {
 
                 MappingJackson2HttpMessageConverter messageConverter = (MappingJackson2HttpMessageConverter) converter;
-                messageConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON, V1_APPLICATION_JSON));
+                messageConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON, V1_APPLICATION_JSON, V2_APPLICATION_JSON));
             }
         }
     }

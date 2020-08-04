@@ -2,6 +2,8 @@ package com.algaworks.algafood.core.modelmapper;
 
 import com.algaworks.algafood.api.v1.model.EnderecoModel;
 import com.algaworks.algafood.api.v1.model.input.ItemPedidoInput;
+import com.algaworks.algafood.api.v2.model.input.CidadeInputV2;
+import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Endereco;
 import com.algaworks.algafood.domain.model.ItemPedido;
 import org.modelmapper.ModelMapper;
@@ -18,6 +20,9 @@ public class ModelMapperConfig {
 
 //        modelMapper.createTypeMap(Restaurante.class, RestauranteModel.class)
 //                .addMapping(Restaurante::getTaxaFrete, RestauranteModel::setTaxaFrete);
+
+        modelMapper.createTypeMap(CidadeInputV2.class, Cidade.class)
+                .addMappings(mapper -> mapper.skip(Cidade::setId));
 
         modelMapper.createTypeMap(ItemPedidoInput.class, ItemPedido.class)
                 .addMappings(mapper -> mapper.skip(ItemPedido::setId));
