@@ -39,8 +39,9 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
-    @Override
+    @Deprecated
     @GetMapping
+    @Override
     public PagedModel<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
 
         Page<Cozinha> cozinhaPage = cozinhaRepository.findAll(pageable);
