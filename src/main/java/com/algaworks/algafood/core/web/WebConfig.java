@@ -13,11 +13,11 @@ import javax.servlet.Filter;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private ApiDeprecationHandler apiDeprecationHandler;
-
-    @Autowired
-    private ApiRetirementHandler apiRetirementHandler;
+//    @Autowired
+//    private ApiDeprecationHandler apiDeprecationHandler;
+//
+//    @Autowired
+//    private ApiRetirementHandler apiRetirementHandler;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -31,14 +31,14 @@ public class WebConfig implements WebMvcConfigurer {
 //        configurer.defaultContentType(AlgaMediaTypes.V2_APPLICATION_JSON);
 //    }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
 //        Deprecia
 //        registry.addInterceptor(apiDeprecatedHandler);
 
 //        Desliga
-        registry.addInterceptor(apiRetirementHandler);
-    }
+//        registry.addInterceptor(apiRetirementHandler);
+//    }
 
     @Bean
     public Filter shallowEtagHeaderFilter() {
