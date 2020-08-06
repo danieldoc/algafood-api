@@ -16,6 +16,8 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/v1/cozinhas/**").permitAll()
                 .anyRequest().authenticated()
             .and()
-            .oauth2ResourceServer().opaqueToken();
+                .cors()
+            .and()
+                .oauth2ResourceServer().opaqueToken();
     }
 }
