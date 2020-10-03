@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.service;
 
+import com.algaworks.algafood.core.security.CryptConfig;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.UsuarioNaoEncontradoException;
@@ -9,6 +10,7 @@ import com.algaworks.algafood.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,9 @@ public class CadastroUsuarioService {
     @Autowired
     private CadastroGrupoService cadastroGrupo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public Usuario salvar(Usuario usuario) {
         usuarioRepository.detach(usuario);
@@ -33,6 +38,9 @@ public class CadastroUsuarioService {
 
         if ((usuarioExistente.isPresent()) && (!usuario.equals(usuarioExistente.get())))
             throw new NegocioException("Ja existe um usuario cadastrado com o email " + usuario.getEmail());
+
+        if (usuario.getId() == null)
+            usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 
         return usuarioRepository.save(usuario);
     }
@@ -58,10 +66,10 @@ public class CadastroUsuarioService {
     public void atualizarSenha(Long usuarioId, String senhaAtual, String novaSenha) {
         Usuario usuario = buscarOuFalhar(usuarioId);
 
-        if (!usuario.getSenha().equals(senhaAtual))
+        if (!passwordEncoder.matches(senhaAtual, usuario.getSenha()))
             throw new NegocioException("Senhas nao coincidem!");
 
-        usuario.setSenha(novaSenha);
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
     }
 
     @Transactional
