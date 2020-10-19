@@ -5,6 +5,7 @@ import com.algaworks.algafood.api.v1.assembler.ProdutoModelAssembler;
 import com.algaworks.algafood.api.v1.model.ProdutoModel;
 import com.algaworks.algafood.api.v1.model.input.ProdutoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.RestauranteProdutoControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Produto;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.CadastroProdutoService;
@@ -34,22 +35,21 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     @Autowired
     private ProdutoInputDisassembler produtoInputDisassembler;
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping
     @Override
     public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId,
                                                 @RequestParam(required = false) Boolean incluirInativos) {
         Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(restauranteId);
 
-        List<Produto> produtos;
-        if (Boolean.TRUE.equals(incluirInativos))
-            produtos = cadastroProdutoService.buscarTodosPorRestaurante(restaurante);
-        else
-            produtos = cadastroProdutoService.buscarAtivosPorRestaurante(restaurante);
-
+        List<Produto> produtos = Boolean.TRUE.equals(incluirInativos) ?
+                cadastroProdutoService.buscarTodosPorRestaurante(restaurante) :
+                cadastroProdutoService.buscarAtivosPorRestaurante(restaurante);
 
         return produtoModelAssembler.toCollectionModel(produtos);
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping("{produtoId}")
     @Override
     public ProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
@@ -57,6 +57,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoModelAssembler.toModel(produto);
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @Override
@@ -71,6 +72,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoModelAssembler.toModel(produto);
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("{produtoId}")
     @Override
     public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId, @RequestBody @Valid ProdutoInput produtoInput) {
