@@ -33,7 +33,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
             var authorities = jwt.getClaimAsStringList("authorities");
 
             if (authorities == null)
-                return Collections.emptyList();
+                authorities = Collections.emptyList();
 
             var scopesAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
             var grantedAuthorities = scopesAuthoritiesConverter.convert(jwt);
