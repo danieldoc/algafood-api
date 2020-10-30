@@ -16,12 +16,14 @@ public @interface CheckSecurity {
         @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        @interface PodeConsultar {}
+        @interface PodeConsultar {
+        }
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_COZINHAS')")
         @Retention(RUNTIME)
         @Target(METHOD)
-        @interface PodeEditar {}
+        @interface PodeEditar {
+        }
     }
 
     @interface Restaurantes {
@@ -29,18 +31,21 @@ public @interface CheckSecurity {
         @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        @interface PodeConsultar {}
+        @interface PodeConsultar {
+        }
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES')")
         @Retention(RUNTIME)
         @Target(METHOD)
-        @interface PodeGerenciarCadastro {}
+        @interface PodeGerenciarCadastro {
+        }
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES') " +
                 "or @algaSecurity.gerenciaRestaurante(#restauranteId)")
         @Retention(RUNTIME)
         @Target(METHOD)
-        @interface PodeGerenciarFuncionamento {}
+        @interface PodeGerenciarFuncionamento {
+        }
     }
 
     @interface Pedidos {
@@ -51,13 +56,23 @@ public @interface CheckSecurity {
                 + "@algaSecurity.gerenciaRestaurante(returnObject.restaurante.id)")
         @Retention(RUNTIME)
         @Target(METHOD)
-        @interface PodeBuscar {}
+        @interface PodeBuscar {
+        }
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULTAR_PEDIDOS') or "
                 + "@algaSecurity.getUsuarioId() == #filtro.clienteId or"
                 + "@algaSecurity.gerenciaRestaurante(#filtro.restauranteId))")
         @Retention(RUNTIME)
         @Target(METHOD)
-        @interface PodePesquisar {}
+        @interface PodePesquisar {
+        }
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and isAuthenticated()")
+        @interface PodeCriar {
+        }
+
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('GERENCIAR_PEDIDOS') or @algaSecurity.gerenciaRestauranteDoPedido(#codigoPedido))")
+        @interface PodeGerenciarPedidos {
+        }
     }
 }

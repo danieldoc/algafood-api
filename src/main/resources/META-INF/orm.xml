@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-mappings
         xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         version="2.2">
 
     <named-query name="Restaurante.consultarPorNome">
@@ -21,6 +20,19 @@
             join restaurante.responsaveis responsavel
             where restaurante.id = :restauranteId
                     and responsavel.id = :usuarioId
+        </query>
+    </named-query>
+
+    <named-query name="Pedido.isPedidoGerenciadoPor">
+        <query>
+            select
+                count(1) > 0
+            from
+                Pedido pedido
+            join pedido.restaurante restaurante
+            join restaurante.responsaveis responsavel
+            where pedido.codigo = :codigoPedido
+                and responsavel.id = :usuarioId
         </query>
     </named-query>
 
