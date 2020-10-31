@@ -7,6 +7,7 @@ import com.algaworks.algafood.api.v1.model.input.UsuarioInput;
 import com.algaworks.algafood.api.v1.model.input.UsuarioSemSenhaInput;
 import com.algaworks.algafood.api.v1.model.input.UsuarioSenhaInput;
 import com.algaworks.algafood.api.v1.openapi.controller.UsuarioControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
 import com.algaworks.algafood.domain.service.CadastroUsuarioService;
@@ -35,6 +36,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     @Autowired
     private UsuarioInputDisassembler usuarioInputDisassembler;
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     @Override
     public CollectionModel<UsuarioModel> listar() {
@@ -44,6 +46,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         return usuarioModelAssembler.toCollectionModel(usuarios);
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping("/{usuarioId}")
     @Override
     public UsuarioModel buscar(@PathVariable Long usuarioId) {
@@ -63,6 +66,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         return usuarioModelAssembler.toModel(cadastroUsuario.salvar(usuario));
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeAlterarUsuario
     @PutMapping("/{usuarioId}")
     @Override
     public UsuarioModel atualizar(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioSemSenhaInput usuarioInput) {
@@ -74,6 +78,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         return usuarioModelAssembler.toModel(cadastroUsuario.salvar(usuarioAtual));
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeAlterarPropriaSenha
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{usuarioId}/senha")
     @Override
@@ -82,6 +87,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         cadastroUsuario.atualizarSenha(usuarioId, usuarioSenhaInput.getSenhaAtual(), usuarioSenhaInput.getNovaSenha());
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{usuarioId}")
     @Override
