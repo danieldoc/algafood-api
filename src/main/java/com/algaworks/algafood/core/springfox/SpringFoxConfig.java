@@ -23,17 +23,13 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.builders.*;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.ResponseMessage;
-import springfox.documentation.service.Tag;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
+import springfox.documentation.spi.service.contexts.SecurityContextBuilder;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -42,6 +38,8 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLStreamHandler;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -110,6 +108,8 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
                         UsuariosModelOpenApi.class))
+                .securitySchemes(Collections.singletonList(securityScheme()))
+                .securityContexts(Collections.singletonList(securityContext()))
                 .apiInfo(apiInfoV1())
                 .tags(
                         new Tag("Cidades", "Gerencia as cidades"),
@@ -124,6 +124,36 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                         new Tag("Estatisticas", "Estatisticas da AlgaFood"),
                         new Tag("Permissões", "Gerencia as permissões")
                 );
+    }
+
+    private SecurityScheme securityScheme() {
+        return new OAuthBuilder()
+                .name("AlgaFood")
+                .grantTypes(grantTypes())
+                .scopes(scopes())
+                .build();
+    }
+
+    private SecurityContext securityContext() {
+        var securityReference = SecurityReference.builder()
+                .reference("AlgaFood")
+                .scopes(scopes().toArray(new AuthorizationScope[0]))
+                .build();
+
+        return SecurityContext.builder()
+                .securityReferences(Collections.singletonList(securityReference))
+                .forPaths(PathSelectors.any())
+                .build();
+    }
+
+    private List<AuthorizationScope> scopes() {
+        return Arrays.asList(
+                new AuthorizationScope("READ", "Acesso de leitura"),
+                new AuthorizationScope("WRITE", "Acesso de escrita"));
+    }
+
+    private List<GrantType> grantTypes() {
+        return Collections.singletonList(new ResourceOwnerPasswordCredentialsGrant("/oauth/token"));
     }
 
     @Bean
