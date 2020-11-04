@@ -33,7 +33,8 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
 
         modelMapper.map(pedido, pedidoModel);
 
-        pedidoModel.add(algaLinks.linkToPedidos("pedidos"));
+        if (algaSecurity.podePesquisarPedidos())
+            pedidoModel.add(algaLinks.linkToPedidos("pedidos"));
 
         if (algaSecurity.podeGerenciarPedidos(pedido.getCodigo())) {
             if (pedido.podeSerConfirmado())
@@ -47,23 +48,32 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
         }
 
         Long restauranteId = pedidoModel.getRestaurante().getId();
-        pedidoModel.getRestaurante()
-                .add(algaLinks.linkToRestaurante(restauranteId));
 
-        Long usuarioId = pedidoModel.getCliente().getId();
-        pedidoModel.getCliente()
-                .add(algaLinks.linkToUsuario(usuarioId));
+        if (algaSecurity.podeConsultarRestaurantes())
+            pedidoModel.getRestaurante()
+                    .add(algaLinks.linkToRestaurante(restauranteId));
 
-        Long formaPagamentoId = pedidoModel.getFormaPagamento().getId();
-        pedidoModel.getFormaPagamento()
-                .add(algaLinks.linkToFormaPagamento(formaPagamentoId));
+        if (algaSecurity.podeConsultarUsuariosGruposPermissoes()) {
+            Long usuarioId = pedidoModel.getCliente().getId();
+            pedidoModel.getCliente()
+                    .add(algaLinks.linkToUsuario(usuarioId));
+        }
 
-        Long cidadeId = pedidoModel.getEnderecoEntrega().getCidade().getId();
-        pedidoModel.getEnderecoEntrega().getCidade()
-                .add(algaLinks.linkToCidade(cidadeId));
+        if (algaSecurity.podeConsultarFormasPagamento()) {
+            Long formaPagamentoId = pedidoModel.getFormaPagamento().getId();
+            pedidoModel.getFormaPagamento()
+                    .add(algaLinks.linkToFormaPagamento(formaPagamentoId));
+        }
 
-        pedidoModel.getItens().forEach(item ->
-                item.add(algaLinks.linkToProduto(restauranteId, item.getProdutoId(), "produto")));
+        if (algaSecurity.podeConsultarCidades()) {
+            Long cidadeId = pedidoModel.getEnderecoEntrega().getCidade().getId();
+            pedidoModel.getEnderecoEntrega().getCidade()
+                    .add(algaLinks.linkToCidade(cidadeId));
+        }
+
+        if (algaSecurity.podeConsultarRestaurantes())
+            pedidoModel.getItens().forEach(item ->
+                    item.add(algaLinks.linkToProduto(restauranteId, item.getProdutoId(), "produto")));
 
         return pedidoModel;
     }
