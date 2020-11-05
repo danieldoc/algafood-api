@@ -195,6 +195,11 @@
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>8.20</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
