@@ -12,6 +12,6 @@ public class HostCheckController {
     @GetMapping("/hostcheck")
     public String checkHost() throws UnknownHostException {
         return InetAddress.getLocalHost().getHostAddress()
-                .concat(InetAddress.getLocalHost().getHostName());
+                .concat(" - ").concat(InetAddress.getLocalHost().getHostName());
     }
 }
